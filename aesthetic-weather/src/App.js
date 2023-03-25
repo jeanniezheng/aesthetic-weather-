@@ -31,10 +31,11 @@ function App() {
       })
       .catch(error => {
         console.error(error.message);
+        let randomGif = Math.floor(Math.random() * 3) + 1
         setData({});
         setLocation('');
         setCity('LOCATION NOT FOUND!');
-        setBackgroundImage(`../assets/Error.gif`)
+        setBackgroundImage(`../assets/Error${randomGif}.gif`)
       });
     console.log(data)
 
