@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import axios from 'axios'
 import './index.css'
+// import gif from './assets/cloudy2.gif';
 
 function App() {
   const [data, setData] = useState({})
   const [location, setLocation] = useState('')
   const [city, setCity] = useState("Today's Weather")
+  const [backgroundImage, setBackgroundImage] = useState('../assets/choose.gif')
+  // const currDate = new Date().toLocaleDateString();
+  const currTime = new Date().toLocaleTimeString();
+
 
   const inputLocation = (event) => {
     event.preventDefault();
@@ -21,14 +25,18 @@ function App() {
       .then(results => {
         setData(results);
         setCity(location.toUpperCase());
+        setBackgroundImage(`../assets/${results.weather[0].main}.gif`)
         setLocation('');
+
       })
       .catch(error => {
         console.error(error.message);
         setData({});
         setLocation('');
         setCity('LOCATION NOT FOUND!');
+        setBackgroundImage(`../assets/Error.gif`)
       });
+    console.log(data)
 
   };
 
@@ -39,30 +47,40 @@ function App() {
 
   let convertToFahrenheit = (k) => {
     let fahrenheit = Math.floor((k - 273.15) * 1.8 + 32);
-    return <h1> {fahrenheit} &deg; </h1>
+    return <h1> {fahrenheit} &deg;</h1>
   }
 
   return (
-    <div className="App">
-      <h1>{city}</h1>
-      <div className='search'>
-        <form
-          onSubmit={inputLocation}
-          autoComplete='off'>
-          <input
-            type='text'
-            onChange={handleChange}
-            value={location}
-            placeholder='enter location'
-            name='city' />
-          <input className='submit-button' type='submit' />
-        </form>
+    <div className="container"
+      style={{
+        backgroundImage: `url(${backgroundImage})`
+      }}
+    >
+      <div className='weather-information'>
+        <div className='search'>
+          <form
+            onSubmit={inputLocation}
+            autoComplete='off'>
+            <input
+              type='text'
+              onChange={handleChange}
+              value={location}
+              placeholder='enter location'
+              name='city' />
+            <input className='submit-button' type='submit' />
+          </form>
+        </div>
+
+        <div className='main-info'>
+          <h1>{city} | {currTime}</h1>
+          <div className='temp'>
+            {data.main && (convertToFahrenheit(data.main.temp))}
+            <h2>{data.main && data.weather[0].description}</h2>
+          </div>
+        </div>
       </div>
-      <div className='temp'>
-        {data.main && (convertToFahrenheit(data.main.temp))}
-        {data.main && data.weather[0].main}
-      </div>
-    </div>
+
+    </div >
   );
 }
 
