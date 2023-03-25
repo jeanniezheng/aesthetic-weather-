@@ -3,6 +3,7 @@ import './index.css'
 // import gif from './assets/cloudy2.gif';
 
 function App() {
+  const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
   const [data, setData] = useState({})
   const [location, setLocation] = useState('')
   const [city, setCity] = useState("Today's Weather")
@@ -13,7 +14,7 @@ function App() {
 
   const inputLocation = (event) => {
     event.preventDefault();
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=8c0b474f6453fd3a3342808b8c1166c5`
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`
     fetch(url)
       .then(response => {
         if (!response.ok) {
